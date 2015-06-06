@@ -83,11 +83,11 @@ typedef NS_ENUM(NSInteger, kHttpStatusCode) {
  *  @param success     success callback handler
  *  @param failure     failure callback handler
  */
-- (void) uploadFileRequestWithHttpHeaders:(NSMutableDictionary*) headers
-                          withServiceName:(NSString*) serviceName
-                           withParameters:(NSMutableDictionary*) params
-                             withFileData:(NSArray*) files
-                              withSuccess:(void (^)(NSURLSessionDataTask *task, id responseObject))success
-                              withFailure:(void (^)(NSURLSessionDataTask *task, NSError *error))failure;
+- (void) startMultipartFormDataRequestWithHttpHeaders:(NSMutableDictionary*) headers
+                                      withServiceName:(NSString*) serviceName
+                                       withParameters:(NSMutableDictionary*) params
+                                         withFileData:(NSArray*) files
+                                          withSuccess:(void (^)(NSURLSessionDataTask *task, id responseObject))success
+                                          withFailure:(void (^)(NSURLSessionDataTask *task, NSError *error))failure;
 
 @end

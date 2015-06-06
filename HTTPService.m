@@ -208,12 +208,12 @@
     }
 }
 
-- (void) uploadFileRequestWithHttpHeaders:(NSMutableDictionary*) headers
-                          withServiceName:(NSString*) serviceName
-                           withParameters:(NSMutableDictionary*) params
-                             withFileData:(NSArray*) files
-                              withSuccess:(void (^)(NSURLSessionDataTask *task, id responseObject))success
-                              withFailure:(void (^)(NSURLSessionDataTask *task, NSError *error))failure
+- (void) startMultipartFormDataRequestWithHttpHeaders:(NSMutableDictionary*) headers
+                                      withServiceName:(NSString*) serviceName
+                                       withParameters:(NSMutableDictionary*) params
+                                         withFileData:(NSArray*) files
+                                          withSuccess:(void (^)(NSURLSessionDataTask *task, id responseObject))success
+                                          withFailure:(void (^)(NSURLSessionDataTask *task, NSError *error))failure
 {
     NSAssert(serviceName, ([NSString stringWithFormat:@"\n<------------------->\n%@\n%sn<------------------->",@"serviceName can't be nil",__PRETTY_FUNCTION__]));
     

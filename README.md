@@ -59,7 +59,7 @@ NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithObjectsAndKey
 `PUT` - *kHttpMethodTypePut*
 
 
-**Note:** *There is no need to pass **Content-Type** and **Accept** in header.*
+**Note:** *There is no need to pass **Content-Type** and **Accept** in header. It uses Content-Type "application/json"*
 
 **2. Multipart form data -**
 
@@ -81,6 +81,6 @@ NSData *fileData = UIImageJPEGRepresentation(image, 1.0);
 
 **Note:** 
 
-* *There is no need to pass **Content-Type** in header.*
+* *There is no need to pass **Content-Type** in header. It uses Content-Type "multipart/form-data"*
 
 * *This methods takes array of NSData objects, so you can pass multiple files in it.*
