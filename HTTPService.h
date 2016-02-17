@@ -10,7 +10,7 @@
 #import "AFNetworking.h"
 
 // base URL for all HTTP communication
-#define BASE_URL @"http://192.168.0.170/baiti/mobile/"
+#define BASE_URL @"http://192.168.0.122/apitest/webservices/"
 
 typedef NS_ENUM(NSInteger, kHttpMethodType) {
     kHttpMethodTypeGet      = 0,    // GET

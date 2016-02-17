@@ -119,7 +119,7 @@
 {
     NSAssert(serviceName, ([NSString stringWithFormat:@"\n<------------------->\n%@\n%sn<------------------->",@"serviceName can't be nil",__PRETTY_FUNCTION__]));
     
-    NSString *serviceUrl = [httpBaseURL stringByAppendingPathComponent:serviceName];
+    NSString *serviceUrl = [httpBaseURL stringByAppendingFormat:@"%@",serviceName];
     
     if (headers == nil)
     {
@@ -142,6 +142,7 @@
         {
             [httpSessionManager GET:serviceUrl
                          parameters:params
+                         progress:nil
                             success:^(NSURLSessionDataTask *task, id responseObject) {
                                 
                                 if (success != nil)
@@ -158,6 +159,7 @@
         {
             [httpSessionManager POST:serviceUrl
                           parameters:params
+                          progress:nil
                              success:^(NSURLSessionDataTask *task, id responseObject) {
                                  
                                  if (success != nil)
@@ -239,6 +241,7 @@
            [formData appendPartWithFileData:fileData name:@"image" fileName:@"future.jpg" mimeType:@"image/jpeg"];
        }
    }
+                     progress:nil
                      success:^(NSURLSessionDataTask *task, id responseObject) {
                          
                          if (success != nil)
