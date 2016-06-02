@@ -120,3 +120,17 @@ use instance method `cancelAllTasks` from `HTTPService`
 ```objective-c
 [httpService cancelAllTasks];
 ```
+
+**4. SSL Pinning -**
+
+To use SSL pinning in your projects add certificate to your project's bandle and set `shouldUseSecurityPolicy` to true.
+
+```objective-c
+HTTPService *httpService = [[HTTPService alloc] init];
+httpService.shouldUseSecurityPolicy = true;
+```
+
+**Note:** 
+
+* *Drawback of using SSL pinning is that certificate that you added to your bundle may expire in some time and then you will need to update your app with new certificate*
+

@@ -40,6 +40,13 @@ typedef NS_ENUM(NSInteger, kHttpStatusCode) {
     NSString *httpBaseURL;
 }
 
+#pragma mark - Properties
+
+/**
+ *  Security Policy is for SSL pinning, default value is false.
+ */
+@property (nonatomic,assign) BOOL shouldUseSecurityPolicy;
+
 #pragma mark - Designated Initializer
 
 /**

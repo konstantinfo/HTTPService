@@ -55,6 +55,11 @@
         httpSessionManager.requestSerializer = [AFHTTPRequestSerializer serializer];
         httpSessionManager.responseSerializer = [AFJSONResponseSerializer serializer];
         
+        if (_shouldUseSecurityPolicy) {
+            AFSecurityPolicy *securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModePublicKey];
+            httpSessionManager.securityPolicy = securityPolicy;
+        }
+        
         arrayRunningTasks = [[NSMutableArray alloc] init];
     }
     
