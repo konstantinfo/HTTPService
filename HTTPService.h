@@ -64,8 +64,10 @@ typedef NS_ENUM(NSInteger, kHttpStatusCode) {
  *  @param params         parameters in key-value pair
  *  @param success        success callback handler
  *  @param failure        failure callback handler
+ *
+ *  @return NSURLSessionDataTask object
  */
-- (void) startRequestWithHttpMethod:(kHttpMethodType) httpMethodType
+- (NSURLSessionDataTask*) startRequestWithHttpMethod:(kHttpMethodType) httpMethodType
                     withHttpHeaders:(NSMutableDictionary*) headers
                     withServiceName:(NSString*) serviceName
                      withParameters:(NSMutableDictionary*) params
@@ -82,12 +84,19 @@ typedef NS_ENUM(NSInteger, kHttpStatusCode) {
  *  @param files       array of NSData objects for file content
  *  @param success     success callback handler
  *  @param failure     failure callback handler
+ *
+ *  @return NSURLSessionDataTask object
  */
-- (void) startMultipartFormDataRequestWithHttpHeaders:(NSMutableDictionary*) headers
+- (NSURLSessionDataTask*) startMultipartFormDataRequestWithHttpHeaders:(NSMutableDictionary*) headers
                                       withServiceName:(NSString*) serviceName
                                        withParameters:(NSMutableDictionary*) params
                                          withFileData:(NSArray*) files
                                           withSuccess:(void (^)(NSURLSessionDataTask *task, id responseObject))success
                                           withFailure:(void (^)(NSURLSessionDataTask *task, NSError *error))failure;
+
+/**
+ *  Call this to cancel all tasks running on single instance
+ */
+- (void) cancelAllTasks;
 
 @end

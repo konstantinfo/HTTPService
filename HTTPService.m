@@ -7,7 +7,13 @@
 
 #import "HTTPService.h"
 
-@interface HTTPService ()
+@interface HTTPService () {
+    
+    /**
+     *  array that holds all running data tasks
+     */
+    NSMutableArray *arrayRunningTasks;
+}
 
 /**
  *  Call this to set HTTP headers for request
@@ -48,6 +54,8 @@
         
         httpSessionManager.requestSerializer = [AFHTTPRequestSerializer serializer];
         httpSessionManager.responseSerializer = [AFJSONResponseSerializer serializer];
+        
+        arrayRunningTasks = [[NSMutableArray alloc] init];
     }
     
     return self;
@@ -68,6 +76,8 @@
         
         httpSessionManager.requestSerializer = [AFHTTPRequestSerializer serializer];
         httpSessionManager.responseSerializer = [AFJSONResponseSerializer serializer];
+        
+        arrayRunningTasks = [[NSMutableArray alloc] init];
     }
     
     return self;
@@ -108,9 +118,23 @@
     }];
 }
 
+- (void)addTask:(NSURLSessionDataTask*) dataTask {
+    
+    if (![arrayRunningTasks containsObject:dataTask]) {
+        [arrayRunningTasks addObject:dataTask];
+    }
+}
+
+- (void)removeTask:(NSURLSessionDataTask*) dataTask {
+    
+    if ([arrayRunningTasks containsObject:dataTask]) {
+        [arrayRunningTasks removeObject:dataTask];
+    }
+}
+
 #pragma mark - Instance Methods
 
-- (void) startRequestWithHttpMethod:(kHttpMethodType) httpMethodType
+- (NSURLSessionDataTask*) startRequestWithHttpMethod:(kHttpMethodType) httpMethodType
                     withHttpHeaders:(NSMutableDictionary*) headers
                     withServiceName:(NSString*) serviceName
                      withParameters:(NSMutableDictionary*) params
@@ -140,7 +164,7 @@
     {
         case kHttpMethodTypeGet:
         {
-            [httpSessionManager GET:serviceUrl
+            NSURLSessionDataTask *dataTask =  [httpSessionManager GET:serviceUrl
                          parameters:params
                          progress:nil
                             success:^(NSURLSessionDataTask *task, id responseObject) {
@@ -153,55 +177,103 @@
                                 if (failure != nil)
                                     failure(task,error);
                             }];
+            
+            if (dataTask != nil) {
+                
+                [self addTask:dataTask];
+                
+                return dataTask;
+            }else {
+                return nil;
+            }
         }
             break;
         case kHttpMethodTypePost:
         {
-            [httpSessionManager POST:serviceUrl
+            NSURLSessionDataTask *dataTask = [httpSessionManager POST:serviceUrl
                           parameters:params
                           progress:nil
                              success:^(NSURLSessionDataTask *task, id responseObject) {
+                                 
+                                 [self removeTask:task];
                                  
                                  if (success != nil)
                                      success(task,responseObject);
                              }
                              failure:^(NSURLSessionDataTask *task, NSError *error) {
                                  
+                                 [self removeTask:task];
+                                 
                                  if (failure != nil)
                                      failure(task,error);
                              }];
+            
+            if (dataTask != nil) {
+                
+                [self addTask:dataTask];
+                
+                return dataTask;
+            }else {
+                return nil;
+            }
         }
             break;
         case kHttpMethodTypeDelete:
         {
-            [httpSessionManager DELETE:serviceUrl
+            NSURLSessionDataTask *dataTask = [httpSessionManager DELETE:serviceUrl
                             parameters:params
                                success:^(NSURLSessionDataTask *task, id responseObject) {
+                                   
+                                   [self removeTask:task];
                                    
                                    if (success != nil)
                                        success(task,responseObject);
                                }
                                failure:^(NSURLSessionDataTask *task, NSError *error) {
                                    
+                                   [self removeTask:task];
+                                   
                                    if (failure != nil)
                                        failure(task,error);
                                }];
+            
+            if (dataTask != nil) {
+                
+                [self addTask:dataTask];
+                
+                return dataTask;
+            }else {
+                return nil;
+            }
         }
             break;
         case kHttpMethodTypePut:
         {
-            [httpSessionManager PUT:serviceUrl
+            NSURLSessionDataTask *dataTask = [httpSessionManager PUT:serviceUrl
                          parameters:params
                             success:^(NSURLSessionDataTask *task, id responseObject) {
+                                
+                                [self removeTask:task];
                                 
                                 if (success != nil)
                                     success(task,responseObject);
                             }
                             failure:^(NSURLSessionDataTask *task, NSError *error) {
                                 
+                                [self removeTask:task];
+                                
                                 if (failure != nil)
                                     failure(task,error);
                             }];
+            
+            if (dataTask != nil) {
+                
+                [self addTask:dataTask];
+                
+                return dataTask;
+            }else {
+                return nil;
+            }
         }
             break;
             
@@ -210,7 +282,7 @@
     }
 }
 
-- (void) startMultipartFormDataRequestWithHttpHeaders:(NSMutableDictionary*) headers
+- (NSURLSessionDataTask*) startMultipartFormDataRequestWithHttpHeaders:(NSMutableDictionary*) headers
                                       withServiceName:(NSString*) serviceName
                                        withParameters:(NSMutableDictionary*) params
                                          withFileData:(NSArray*) files
@@ -232,7 +304,7 @@
         [self setHeaders:headers];
     }
     
-    [httpSessionManager POST:serviceUrl
+    NSURLSessionDataTask *dataTask = [httpSessionManager POST:serviceUrl
                   parameters:params
    constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
        
@@ -244,14 +316,33 @@
                      progress:nil
                      success:^(NSURLSessionDataTask *task, id responseObject) {
                          
+                         [self removeTask:task];
+                         
                          if (success != nil)
                              success(task,responseObject);
                      }
                      failure:^(NSURLSessionDataTask *task, NSError *error) {
                          
+                         [self removeTask:task];
+                         
                          if (failure != nil)
                              failure(task,error);
                      }];
+    
+    if (dataTask != nil) {
+        
+        [self addTask:dataTask];
+        
+        return dataTask;
+    }else {
+        return nil;
+    }
 }
 
+- (void) cancelAllTasks {
+    
+    for (NSURLSessionDataTask *task in arrayRunningTasks) {
+        [task cancel];
+    }
+}
 @end

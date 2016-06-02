@@ -84,3 +84,39 @@ NSData *fileData = UIImageJPEGRepresentation(image, 1.0);
 * *There is no need to pass **Content-Type** in header. It uses Content-Type "multipart/form-data"*
 
 * *This methods takes array of NSData objects, so you can pass multiple files in it.*
+
+**3. Cancel request -**
+
+If you want to cancel a request/task then you can call `cancel` on `NSURLSessionDataTask`.
+
+Assign return value of `startRequestWithHttpMethod` (`NSURLSessionDataTask`) to a variable -
+
+**NSURLSessionDataTask *dataTask = [httpService startRequestWithHttpMethod:....**
+
+then
+
+**[dataTask cancel];**
+
+```objective-c
+NSMutableDictionary *headers = [[NSMutableDictionary alloc] initWithObjectsAndKeys:@"ab23tcdsjbvhd",@"token",nil];
+NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithObjectsAndKeys:@"value1",@"param1",@"value2",@"param2", nil];
+NSURLSessionDataTask *dataTask = [httpService startRequestWithHttpMethod:kHttpMethodTypePost
+                            withHttpHeaders:headers
+                            withServiceName:@"serviceName"
+                             withParameters:params
+                                withSuccess:^(NSURLSessionDataTask *task, id responseObject) {
+                                    NSLog(@"response - %@",responseObject);
+                                }
+                                withFailure:^(NSURLSessionDataTask *task, NSError *error) {
+                                    NSLog(@"error - %@",[error localizedDescription]);
+                                }];                                
+[dataTask cancel];
+```
+
+or
+
+use instance method `cancelAllTasks` from `HTTPService`
+
+```objective-c
+[httpService cancelAllTasks];
+```
